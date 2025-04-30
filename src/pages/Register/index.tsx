@@ -1,35 +1,28 @@
-import {
-  Stack,
-  TextField,
-  SxProps,
-  Theme,
-  Button,
-  Box,
-} from "@mui/material";
-import logo from "../../assets/logo.svg";
+import { Stack, TextField, SxProps, Theme, Button, Box } from "@mui/material";
+import logo from "../../assets/Logo.jpeg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const stylesInput: SxProps<Theme> = {
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#fff",
+      borderColor: "#2196F3",
     },
     "&:hover fieldset": {
-      borderColor: "#fff",
+      borderColor: "#2196F3",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#fff",
+      borderColor: "#2196F3",
     },
   },
   "& .MuiInputLabel-root": {
-    color: "#fff",
+    color: "#2196F3",
   },
   "& .MuiInputLabel-root.Mui-focused": {
-    color: "#fff",
+    color: "#2196F3",
   },
   "& .MuiInputBase-input": {
-    color: "#fff",
+    color: "#2196F3",
   },
 };
 
@@ -77,18 +70,21 @@ export const Register = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
-      bgcolor="#242e34"
+      bgcolor="#2196F3"
       component="main"
     >
       <Stack
-        bgcolor="#0d253f"
+        bgcolor="#ffff"
         gap={2}
         p={5}
         borderRadius="16px"
         component="form"
         onSubmit={handleSubmit}
+        width={400}
       >
-        <Box component="img" src={logo} alt="Logo" />
+        <Box display="flex" justifyContent="center">
+          <Box component="img" src={logo} alt="Logo" width={130} />/
+        </Box>
         <TextField
           label="Nombre"
           variant="outlined"
@@ -125,10 +121,18 @@ export const Register = () => {
           value={formData.confirmPassword}
           onChange={handleChange}
         />
-        <Button variant="contained" type="submit">
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{ bgcolor: "#2196F3", "&:hover": { bgcolor: "#42A5F5" } }}
+        >
           Registrarse
         </Button>
-        <Button variant="text" onClick={() => navigate("/login")}>
+        <Button
+          variant="text"
+          onClick={() => navigate("/login")}
+          sx={{ color: "#2196F3" }}
+        >
           ¿Ya tienes cuenta? Inicia sesión
         </Button>
       </Stack>
