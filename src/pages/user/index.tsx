@@ -14,7 +14,7 @@ export const User = () => { // Nombre del componente en mayúscula
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
-    navigate("/user");
+    navigate("/login");
   };
 
   return (

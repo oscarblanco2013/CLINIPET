@@ -43,11 +43,17 @@ export const Login = () => {
       const parsedUser = JSON.parse(storedUser);
 
       if (
+        formData.email === "admin@admin.com" &&
+        formData.password === "admin"
+      ) {
+        localStorage.setItem("isAuthenticated", "true");
+        navigate("/admin");
+      } else if (
         formData.email === parsedUser.email &&
         formData.password === parsedUser.password
       ) {
         localStorage.setItem("isAuthenticated", "true");
-        navigate("/home");
+        navigate("/user");
       } else {
         alert("Credenciales incorrectas");
       }
