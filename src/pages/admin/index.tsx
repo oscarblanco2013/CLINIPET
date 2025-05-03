@@ -8,12 +8,17 @@ import {
   ListItemText,
   Divider,
   Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  TextField,
 } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
 import PetsIcon from "@mui/icons-material/Pets";
 import EventIcon from "@mui/icons-material/Event";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
@@ -21,16 +26,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import logo from "../../assets/image.png";
 
 const drawerWidth = 240;
-const petColumns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 90 },
-  { field: "name", headerName: "Name", width: 170 },
-  { field: "species", headerName: "Species", width: 170 },
-  { field: "race", headerName: "Race", width: 170 },
-  { field: "sex", headerName: "Sex", width: 130 },
-  { field: "age", headerName: "Age", width: 70, type: "number" },
-  { field: "owners_name", headerName: "Owner's Name", width: 170 },
-  { field: "phone", headerName: "Phone", width: 130 },
-];
 
 const petRows = [
   {
@@ -91,6 +86,10 @@ export const Admin = () => {
   const [appointmentsCount] = useState(12);
   const [recordsCount] = useState(28);
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("isAuthenticated");
     if (isAuthenticated !== "true") {
@@ -102,20 +101,89 @@ export const Admin = () => {
     localStorage.removeItem("isAuthenticated");
     navigate("/login");
   };
-  const paginationModel = { page: 0, pageSize: 5 };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const filteredPetRows = petRows.filter((row) => {
+    const searchValue = searchTerm.toLowerCase();
+    return (
+      row.id.toString().includes(searchValue) ||
+      row.name.toLowerCase().includes(searchValue) ||
+      row.species.toLowerCase().includes(searchValue) ||
+      row.race.toLowerCase().includes(searchValue) ||
+      row.sex.toLowerCase().includes(searchValue) ||
+      row.age.toString().includes(searchValue) ||
+      row.owners_name.toLowerCase().includes(searchValue) ||
+      row.phone.toString().includes(searchValue)
+    );
+  });
 
   const renderContent = () => {
     switch (selectedModule) {
       case "mascotas":
         return (
-          <Paper sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <DataGrid
-              rows={petRows}
-              columns={petColumns}
-              initialState={{ pagination: { paginationModel } }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-              sx={{ border: 0 }}
+          <Paper>
+            <TextField
+              label="Buscar mascota"
+              variant="outlined"
+              fullWidth
+              sx={{ marginBottom: 2 }}
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <TableContainer>
+              <Table>
+                <TableHead sx={{ backgroundColor: "#2196F3" }}>
+                  <TableRow>
+                    <TableCell sx={{ color: "white" }}>ID</TableCell>
+                    <TableCell sx={{ color: "white" }}>Nombre</TableCell>
+                    <TableCell sx={{ color: "white" }}>Especie</TableCell>
+                    <TableCell sx={{ color: "white" }}>Raza</TableCell>
+                    <TableCell sx={{ color: "white" }}>Sexo</TableCell>
+                    <TableCell sx={{ color: "white" }}>Edad</TableCell>
+                    <TableCell sx={{ color: "white" }}>Propietario</TableCell>
+                    <TableCell sx={{ color: "white" }}>Teléfono</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredPetRows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => (
+                      <TableRow key={row.id}>
+                        <TableCell>{row.id}</TableCell>
+                        <TableCell>{row.name}</TableCell>
+                        <TableCell>{row.species}</TableCell>
+                        <TableCell>{row.race}</TableCell>
+                        <TableCell>{row.sex}</TableCell>
+                        <TableCell>{row.age}</TableCell>
+                        <TableCell>{row.owners_name}</TableCell>
+                        <TableCell>{row.phone}</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              component="div"
+              count={filteredPetRows.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5, 10]}
             />
           </Paper>
         );
