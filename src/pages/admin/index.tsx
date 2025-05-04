@@ -16,6 +16,7 @@ import {
   TableRow,
   TablePagination,
   TextField,
+  Button,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,8 @@ import PetsIcon from "@mui/icons-material/Pets";
 import EventIcon from "@mui/icons-material/Event";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import LogoutIcon from "@mui/icons-material/Logout";
+import jsPDF from "jspdf";
+import logoImage from "../../assets/c277357d-66c5-4494-89ac-8014697728a2.jpeg";
 import logo from "../../assets/image.png";
 
 const drawerWidth = 240;
@@ -80,12 +83,38 @@ const petRows = [
   },
 ];
 
+const medicalHistory = [
+  {
+    id: 1,
+    petName: "Tony",
+    date: "2024-04-01",
+    reason: "Vacunación",
+    diagnosis: "Saludable",
+    treatment: "Vacuna aplicada",
+  },
+  {
+    id: 2,
+    petName: "Luna",
+    date: "2024-04-05",
+    reason: "Chequeo general",
+    diagnosis: "Sin anomalías",
+    treatment: "Ninguno",
+  },
+  {
+    id: 3,
+    petName: "Bella",
+    date: "2024-04-10",
+    reason: "Infección ocular",
+    diagnosis: "Conjuntivitis",
+    treatment: "Gotas oftálmicas por 7 días",
+  },
+];
+
 export const Admin = () => {
   const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState("mascotas");
   const [appointmentsCount] = useState(12);
   const [recordsCount] = useState(28);
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
@@ -130,6 +159,40 @@ export const Admin = () => {
       row.phone.toString().includes(searchValue)
     );
   });
+
+  const filteredHistories = medicalHistory.filter((entry) =>
+    entry.petName.toLowerCase().includes(searchTerm)
+  );
+
+  const exportHistorialPDF = (historial) => {
+    const doc = new jsPDF();
+    const img = new Image();
+    img.src = logoImage;
+
+    img.onload = () => {
+      doc.addImage(img, "JPEG", 10, 10, 30, 30);
+      doc.setFontSize(18);
+      doc.text("CLINIPET - Historial Médico", 50, 20);
+
+      doc.setFontSize(12);
+      doc.text(`Fecha: ${historial.date}`, 50, 30);
+      doc.text(`Nombre de la Mascota: ${historial.petName}`, 50, 40);
+      doc.text(`Motivo: ${historial.reason}`, 50, 50);
+      doc.text(`Diagnóstico: ${historial.diagnosis}`, 50, 60);
+      doc.text(`Tratamiento: ${historial.treatment}`, 50, 70);
+
+      doc.setFontSize(10);
+      doc.text("Firma del Veterinario:", 50, 100);
+      doc.line(50, 102, 150, 102);
+
+      doc.setFontSize(8);
+      doc.text("CLINIPET - Tu clínica veterinaria de confianza", 50, 280, {
+        align: "center",
+      });
+
+      doc.save(`historial_${historial.petName}.pdf`);
+    };
+  };
 
   const renderContent = () => {
     switch (selectedModule) {
@@ -194,12 +257,54 @@ export const Admin = () => {
             Total de citas agendadas: {appointmentsCount}
           </Typography>
         );
+
       case "historiales":
         return (
-          <Typography variant="h6">
-            Total de historiales registrados: {recordsCount}
-          </Typography>
+          <Paper>
+            <TextField
+              label="Buscar mascota"
+              variant="outlined"
+              fullWidth
+              sx={{ marginBottom: 2 }}
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <TableContainer>
+              <Table>
+                <TableHead sx={{ backgroundColor: "#2196F3" }}>
+                  <TableRow>
+                    <TableCell sx={{ color: "white" }}>Nombre</TableCell>
+                    <TableCell sx={{ color: "white" }}>Fecha</TableCell>
+                    <TableCell sx={{ color: "white" }}>Motivo</TableCell>
+                    <TableCell sx={{ color: "white" }}>Diagnóstico</TableCell>
+                    <TableCell sx={{ color: "white" }}>Tratamiento</TableCell>
+                    <TableCell sx={{ color: "white" }}>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredHistories.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell>{row.petName}</TableCell>
+                      <TableCell>{row.date}</TableCell>
+                      <TableCell>{row.reason}</TableCell>
+                      <TableCell>{row.diagnosis}</TableCell>
+                      <TableCell>{row.treatment}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          onClick={() => exportHistorialPDF(row)}
+                        >
+                          Exportar PDF
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         );
+
       default:
         return null;
     }
@@ -207,7 +312,6 @@ export const Admin = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* Sidebar */}
       <Drawer
         variant="permanent"
         sx={{
@@ -257,7 +361,7 @@ export const Admin = () => {
             <ListItemIcon>
               <HistoryEduIcon sx={{ color: "white" }} />
             </ListItemIcon>
-            <ListItemText primary="Historiales" />
+            <ListItemText primary="Historial" />
           </ListItem>
         </List>
         <Divider />
@@ -269,7 +373,6 @@ export const Admin = () => {
         </ListItem>
       </Drawer>
 
-      {/* Contenido */}
       <Box
         component="main"
         sx={{
@@ -281,7 +384,7 @@ export const Admin = () => {
         }}
       >
         <Typography variant="h4" gutterBottom>
-          Módulo:{" "}
+          {" "}
           {selectedModule.charAt(0).toUpperCase() + selectedModule.slice(1)}
         </Typography>
         {renderContent()}
