@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Asegúrate de tener instalada esta librería
-import { Login } from "./pages/Login";  // Asegúrate de que Login esté en './pages/Login'
+import { Login } from "./pages/Login"; // Asegúrate de que Login esté en './pages/Login'
 import { Register } from "./pages/Register";
 import { Admin } from "./pages/admin"; // Asegúrate de que Register esté en './pages/Register'
 import { Home } from "./pages/Home";

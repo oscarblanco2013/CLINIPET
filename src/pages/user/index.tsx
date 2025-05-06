@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import imagen from "../../assets/image.png";
 import { AgendarCita } from "../../components/agendarCita.tsx";
-
+import { RegistrarMascotas } from "../../components/RegistrarMascotas.tsx";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -42,11 +42,12 @@ export const User = () => {
   const renderContent = () => {
     switch (selectedModule) {
       case "mascotas":
-        return "";
+        return <RegistrarMascotas />;
       case "citas":
         return <AgendarCita />;
       case "historiales":
-        return <div>Contenido del módulo Historiales</div>;
+        return "";
+
       case "":
       default:
         return (
@@ -96,7 +97,7 @@ export const User = () => {
             <ListItemIcon>
               <PetsIcon sx={{ color: "white" }} />
             </ListItemIcon>
-            <ListItemText primary="Registrar Mascota" />
+            <ListItemText primary="Registrar Mascotas" />
           </ListItem>
           <ListItem
             button
