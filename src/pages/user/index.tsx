@@ -11,6 +11,7 @@ import {
 import imagen from "../../assets/image.png";
 import { AgendarCita } from "../../components/agendarCita.tsx";
 import { RegistrarMascotas } from "../../components/RegistrarMascotas.tsx";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

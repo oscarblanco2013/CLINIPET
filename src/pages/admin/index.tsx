@@ -16,10 +16,11 @@ import {
   TableRow,
   TablePagination,
   TextField,
-  Button,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Historial } from "../../components/Historial.tsx";
+import { CitasAgendadas } from "../../components/CitasAgendadas.tsx";
 import PetsIcon from "@mui/icons-material/Pets";
 import EventIcon from "@mui/icons-material/Event";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
@@ -114,7 +115,6 @@ export const Admin = () => {
   const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState("mascotas");
   const [appointmentsCount] = useState(12);
-  const [recordsCount] = useState(28);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
@@ -252,58 +252,10 @@ export const Admin = () => {
         );
 
       case "citas":
-        return (
-          <Typography variant="h6">
-            Total de citas agendadas: {appointmentsCount}
-          </Typography>
-        );
+        return <CitasAgendadas />;
 
       case "historiales":
-        return (
-          <Paper>
-            <TextField
-              label="Buscar mascota"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: 2 }}
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <TableContainer>
-              <Table>
-                <TableHead sx={{ backgroundColor: "#2196F3" }}>
-                  <TableRow>
-                    <TableCell sx={{ color: "white" }}>Nombre</TableCell>
-                    <TableCell sx={{ color: "white" }}>Fecha</TableCell>
-                    <TableCell sx={{ color: "white" }}>Motivo</TableCell>
-                    <TableCell sx={{ color: "white" }}>Diagnóstico</TableCell>
-                    <TableCell sx={{ color: "white" }}>Tratamiento</TableCell>
-                    <TableCell sx={{ color: "white" }}>Acciones</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredHistories.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.petName}</TableCell>
-                      <TableCell>{row.date}</TableCell>
-                      <TableCell>{row.reason}</TableCell>
-                      <TableCell>{row.diagnosis}</TableCell>
-                      <TableCell>{row.treatment}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          onClick={() => exportHistorialPDF(row)}
-                        >
-                          Exportar PDF
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
-        );
+        return <Historial />;
 
       default:
         return null;

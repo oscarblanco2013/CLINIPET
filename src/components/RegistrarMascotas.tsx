@@ -122,20 +122,7 @@ export const RegistrarMascotas = () => {
           onChange={handleChange}
           required
         />
-        <TextField
-          label="Nombre del propietario"
-          name="owner"
-          value={formData.owner}
-          onChange={handleChange}
-          required
-        />
-        <TextField
-          label="Teléfono"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-        />
+
         <Button type="submit" variant="contained" color="primary">
           Registrar
         </Button>
