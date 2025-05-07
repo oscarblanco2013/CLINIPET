@@ -1,34 +1,11 @@
-import { Button, Stack, Typography } from "@mui/material";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import ForgotPassword from "../../components/Forgotpassword.tsx";
 
-export const Forget_password = () => { // Nombre del componente en mayúscula
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
-    if (isAuthenticated !== "true") {
-      navigate("/forget_password");
-    }
-  }, [navigate]); // Añadir navigate a las dependencias
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    navigate("/forget_password");
+export const Forget_password = () => {
+  const handlePasswordRecovery = async (email: string) => {
+    // Aquí llamas a tu API real
+    console.log("Recuperar contraseña para:", email);
+    await new Promise((resolve) => setTimeout(resolve, 1500)); // Simular retardo
   };
 
-  return (
-    <Stack
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-      bgcolor="#f5f5f5"
-      spacing={2}
-    >
-      <Typography variant="h4">Welcome forget_password</Typography>
-      <Button variant="outlined" onClick={handleLogout}>
-        Cerrar sesión
-      </Button>
-    </Stack>
-  );
+  return <ForgotPassword onSubmitEmail={handlePasswordRecovery} />;
 };

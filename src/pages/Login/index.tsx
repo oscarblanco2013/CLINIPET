@@ -71,7 +71,7 @@ export const Login = () => {
   };
 
   const handleForgotPassword = () => {
-    alert("Funcionalidad de recuperación de contraseña aún no implementada.");
+    navigate("/forget_password"); // Cambia a la ruta de recuperación de contraseña
     // O puedes navegar a una ruta futura: navigate("/forgot-password")
   };
 
