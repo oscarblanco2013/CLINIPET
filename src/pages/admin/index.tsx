@@ -21,10 +21,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Historial } from "../../components/Historial.tsx";
 import { CitasAgendadas } from "../../components/CitasAgendadas.tsx";
+import { Consulta } from "../../components/ConsultaMascota.tsx";
 import PetsIcon from "@mui/icons-material/Pets";
 import EventIcon from "@mui/icons-material/Event";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import LogoutIcon from "@mui/icons-material/Logout";
+import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
 import jsPDF from "jspdf";
 import logoImage from "../../assets/c277357d-66c5-4494-89ac-8014697728a2.jpeg";
 import logo from "../../assets/image.png";
@@ -294,6 +296,16 @@ export const Admin = () => {
               <PetsIcon sx={{ color: "white" }} />
             </ListItemIcon>
             <ListItemText primary="Mascotas" />
+          </ListItem>
+          <ListItem
+            button
+            selected={selectedModule === "ConsultaMascota"}
+            onClick={() => setSelectedModule("ConsultaMascota")}
+          >
+            <ListItemIcon>
+              <HealthAndSafetyIcon sx={{ color: "white" }} />{" "}
+            </ListItemIcon>
+            <ListItemText primary="Consulta" />
           </ListItem>
           <ListItem
             button
